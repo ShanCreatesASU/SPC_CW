@@ -62,72 +62,150 @@ h1 img {
 .stats {
   display: flex;
   justify-content: space-around;
+  gap: 12px;
   margin-bottom: 30px;
   background-color: #f5f5f5;
-  padding: 15px 0;
+  padding: 16px;
   border-radius: 8px;
 }
 
 .stats p {
   margin: 0;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 700;
   color: #333;
+  text-align: center;
+}
+
+.stats strong,
+.stats small {
+  display: block;
+}
+
+.stats strong {
+  margin: 4px 0;
+  font-size: 24px;
+  color: #2368a8;
+}
+
+.stats small {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.level-indicator {
+  margin: 0 0 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.game-status {
+  min-height: 24px;
+  text-align: center;
+  color: #245d3b;
+  font-weight: 700;
 }
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 15px;
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 560px;
 }
 
 .grid-cell {
+  padding: 10px;
   background-color: #e8e8e8;
+  color: #2368a8;
+  border: 2px solid #d2d2d2;
   border-radius: 8px;
   aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s;
-  position: relative;
-  overflow: hidden;
+  gap: 6px;
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 700;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-.water-can-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70px;
-  height: 70px;
-  /* Ensure the wrapper is properly centered */
+.grid-cell:not(:disabled):hover {
+  transform: translateY(-2px);
+  background-color: #d9edff;
 }
 
-.water-can {
-  width: 100%;
-  height: 100%;
-  background-image: url('img/water-can.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  border-radius: 50%;
-  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
-  transform-origin: center; /* Ensure scaling happens from the center */
+.grid-cell:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2368a8;
+  outline-offset: 3px;
 }
 
-@keyframes popUp {
-  0% {
-    transform: scale(0.5); /* Start scaling from the center */
-  }
-  100% {
-    transform: scale(1); /* End scaling at full size */
-  }
+.grid-cell.is-face-down {
+  background-color: #2e9df7;
+  border-color: #1b78c4;
+  color: #fff;
 }
 
+.grid-cell.is-revealed,
+.grid-cell.is-matched {
+  background-color: #fff;
+  border-color: #8bd1cb;
+  cursor: default;
+}
+
+.grid-cell.is-matched {
+  background-color: #e7f6ef;
+  border-color: #4fcb53;
+}
+
+.grid-cell img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.grid-cell span {
+  font-size: clamp(10px, 1.5vw, 14px);
+}
+
+.grid-cell.is-crisis {
+  background-color: #fff0e8;
+  border-color: #ff902a;
+  color: #9b3b20;
+}
+
+.grid-cell.is-consumed {
+  background-color: #f5f0ec;
+  border-color: #c8b8ad;
+}
+
+.crisis-panel {
+  margin: 0 auto 20px;
+  padding: 20px;
+  max-width: 560px;
+  border: 2px solid #ff902a;
+  border-radius: 8px;
+  background: #fff8f2;
+}
+
+.crisis-panel h2 {
+  margin: 0 0 8px;
+  color: #9b3b20;
+}
+
+.crisis-panel p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.crisis-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 
 button {
   background-color: #4CAF50;
@@ -140,4 +218,45 @@ button {
   display: block;
   margin: 30px auto 0;
   transition: background-color 0.2s;
+}
+
+.crisis-actions button {
+  flex: 1 1 150px;
+  margin: 16px 0 0;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  .container {
+    margin: 16px auto;
+    padding: 24px 16px;
+  }
+
+  .stats {
+    padding: 12px 8px;
+    gap: 6px;
+  }
+
+  .stats p {
+    font-size: 13px;
+  }
+
+  .game-grid {
+    gap: 8px;
+  }
+
+  .grid-cell {
+    padding: 6px;
+  }
 }

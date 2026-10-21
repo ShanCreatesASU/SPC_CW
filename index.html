@@ -8,16 +8,26 @@
 </head>
 <body>
   <div class="container">
-    <h1>Water Quest</h1>
-    <p class="game-instructions">Collect 55 water cans to complete the game!</p>
+    <h1>Match and Merge</h1>
+    <p class="game-instructions">Match resource pairs to earn supplies. Crisis cards trigger as soon as you reveal them.</p>
+    <p class="level-indicator">Level <span id="current-level">1</span></p>
     <div class="stats">
-      <p>Cans Collected: <span id="current-cans">0</span></p>
-      <p>Drops Collected: <span id="current-drops">0</span>s</p>
-      <p>Buckets Collected: <span id="current-buckets">0</span>s</p>
+      <p>Jerry cans: <strong id="current-cans">0</strong><small>This level: <span id="level-cans">0</span></small></p>
+      <p>Water drops: <strong id="current-drops">0</strong><small>This level: <span id="level-drops">0</span></small></p>
+      <p>Buckets: <strong id="current-buckets">0</strong><small>This level: <span id="level-buckets">0</span></small></p>
     </div>
-    <div id="achievements" class="achievement"></div>
-    <div class="game-grid"></div>
+    <p id="game-status" class="game-status" aria-live="polite"></p>
+    <section id="crisis-panel" class="crisis-panel" aria-labelledby="crisis-title" aria-live="assertive" hidden>
+      <h2 id="crisis-title"></h2>
+      <p id="crisis-message"></p>
+      <div class="crisis-actions">
+        <button id="try-again" type="button">Try Again</button>
+        <button id="reset-level" type="button">Reset Level</button>
+      </div>
+    </section>
+    <div class="game-grid" aria-label="Matching game board"></div>
     <button id="start-game">Start Game</button>
+    <button id="restart-game" type="button" hidden>Restart Game</button>
   </div>
   <script src="script.js"></script>
 </body>

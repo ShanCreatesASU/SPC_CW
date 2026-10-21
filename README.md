@@ -1,47 +1,28 @@
-# charity: water – Water Quest Game Starter
+# Water Quest
 
-In this game, users tap charity: water’s signature yellow jerry cans as fast as they can to earn points. You’ll be working from a partially built version of the game. Some functionality is already provided, and your job is to complete the rest.
+Water Quest is a resource-matching game. Match two identical resource cards to
+earn a jerry can, water drop, or bucket. Each level contains two pairs of each
+resource and Storm, Flood, and Drought crisis cards.
 
-## What’s Already Done
+## Playing
 
-The starter files already include:
+- Select **Start Game** to begin.
+- Match resource cards to add resources to your current level.
+- Matched cards stay visible and cannot be selected again. Remaining unmatched
+  cards are shuffled after each successful match.
+- A crisis takes effect as soon as its card is revealed:
+  - **Storm** removes current-level water drops.
+  - **Flood** removes current-level water drops and buckets.
+  - **Drought** removes current-level buckets and jerry cans.
+- After a crisis, choose one of the options:
+  - **Try Again** gives one attempt to match two face-down resource cards. A
+    match earns that pair's resource. A mismatch removes the largest current-
+    level resource category; ties prioritize jerry cans, then water drops,
+    then buckets.
+  - **Reset Level** clears resources earned in the current level and deals a
+    fresh board. Resources from completed levels are preserved.
+- Matching every resource pair completes the level and saves its resources.
+  **Restart Game** resets the entire game, including completed levels.
 
-- A **heading and tagline**
-- A **start button**
-- A **game container** displaying a grid
-- A **placeholder timer and score** (not functional yet)
-- A **logo image** from charity: water
-- Working code that:
-  - Starts the game when the start button is clicked  
-  - Makes jerry cans pop up randomly
-
-## What You Need to Add
-
-Here’s what you're required to implement to bring the game to life:
-
-### Game Functionality
-
-- **Update the score**
-  - +1 point for each can clicked  
-
-- **Add a 30-second timer**
-  - When the timer reaches 0, the game ends  
-
-- **Display a message when the game ends**
-  - If the player scores **20 or more points**, show a **winning** message  
-  - If the player scores **less than 20 points**, show a **"try again"** message  
-  - Create one array of possible winning messages and one array of losing messages  
-  - Depending on whether the user wins or loses, randomly pick and display a message from the appropriate array  
-
-### Visual Styling
-
-- **Add charity: water branding**
-  
-  - Use the provided logo  
-  - Use the [charity: water brand guidelines](https://drive.google.com/file/d/1ct4zYRIwHAtxoNQoeaVwWYPdnruSC6sr/view) to stay on-brand with colors and styling
-  - Add styling rules to ensure your game layout adjusts well across different screen sizes
-
-These are the minimum requirements, but if you'd like an additional challenge go ahead and give the LevelUps a shot! For example, you could add logic to decrease the user's score if they miss a jerry can. Have fun and make the game your own!
-
-If you have any questions or need any assistance with your code, reach out to the HelpHub or attend a Drop-In Hour. You got this!!
-
+The board and crisis choices are keyboard-accessible and adapt to smaller
+screens.
