@@ -1,7 +1,8 @@
 const PAIRS_PER_RESOURCE = 2;
 const RESOURCE_TYPES = [
   { id: 'drops', label: 'Water drops', image: 'img/CW water.png' },
-  { id: 'buckets', label: 'Buckets', image: 'img/CW bucket.png' }
+  { id: 'buckets', label: 'Buckets', image: 'img/CW bucket.png' },
+  { id: 'cans', label: 'Jerry Cans', image: 'img/water-can-transparent.png' }
 ];
 const CRISIS = [
   {
@@ -15,6 +16,12 @@ const CRISIS = [
     name: 'Flood',
     image: 'img/CW flood.png',
     effect: inventory => removeResources(inventory, ['drops', 'buckets'])
+  },
+  {
+    id: 'drought',
+    name: 'Drought',
+    image: 'img/CW drought.png',
+    effect: inventory => removeResources(inventory, ['buckets', 'cans'])
   }
 ];
 
@@ -38,7 +45,7 @@ let levelInventory = createInventory();
 let awardedPairs = new Set();
 
 function createInventory() {
-  return { drops: 0, buckets: 0 };
+  return { cans:0, drops: 0, buckets: 0 };
 }
 
 function removeResources(inventory, resourceIds) {
@@ -219,6 +226,7 @@ function triggerCrisis(card) {
 
 function describeCrisisEffect(crisis, lost) {
   const labels = {
+    cans: 'jerry cans',
     drops: 'water drops',
     buckets: 'buckets'
   };
@@ -231,6 +239,7 @@ function describeCrisisEffect(crisis, lost) {
   const explanations = {
     storm: 'The storm washes away all water drops.',
     flood: 'The flood washes away all water drops and buckets.',
+    drought: 'The drought removes all buckets and jerry cans.'
   };
   return `${explanations[crisis.id]} ${consequence} Choose Try Again for one matching attempt, or Reset Level.`;
 }
