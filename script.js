@@ -1,6 +1,8 @@
 // Game configuration and state variables
-const GOAL_CANS = 25;        // Total items needed to collect
+const GOAL_CANS = 55;        // Total items needed to collect
 let currentCans = 0;         // Current number of items collected
+let currentDrops = 0;
+let currentBuckets = 0;
 let gameActive = false;      // Tracks if game is currently running
 let spawnInterval;          // Holds the interval for spawning items
 
