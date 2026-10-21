@@ -131,7 +131,10 @@ h1 img {
   font-weight: 700;
   transition: background-color 0.2s, transform 0.2s;
 }
-
+   .grid-cell { min-width: 0; min-height: 0; overflow: hidden; }
+   .grid-cell img { width: 100%; flex: 1 1 0; min-height: 0; object-fit: contain; }
+   .grid-cell span { flex: none; line-height: 1.1; }
+   
 .grid-cell:not(:disabled):hover {
   transform: translateY(-2px);
   background-color: #d9edff;
@@ -207,18 +210,6 @@ button:focus-visible {
   gap: 12px;
 }
 
-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: block;
-  margin: 30px auto 0;
-  transition: background-color 0.2s;
-}
 
 .crisis-actions button {
   flex: 1 1 150px;
@@ -259,4 +250,17 @@ button:disabled {
   .grid-cell {
     padding: 6px;
   }
+}
+
+#start-game, #restart-game, .crisis-actions button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin: 30px auto 0;
+  transition: background-color 0.2s;
 }

@@ -68,6 +68,11 @@ function createLevel() {
   cards = [];
   selectedCards = [];
   awardedPairs = new Set();
+//Shan suspect this is for pairs not working. 
+//try:
+//if drops === drops { pairDrop};
+//if buckets === buckets { pairBucket};
+//if cans === cans { pairCans};
 
   RESOURCE_TYPES.forEach(resource => {
     for (let pair = 0; pair < PAIRS_PER_RESOURCE; pair += 1) {
@@ -278,7 +283,7 @@ function resolveChallenge() {
 }
 
 function applyChallengePenalty() {
-  const order = ['drops', 'buckets'];
+  const order = ['drops', 'buckets','cans'];
   const highest = Math.max(...order.map(id => levelInventory[id]));
   if (highest === 0) return 'Challenge failed. You had no current-level resources to lose.';
 
