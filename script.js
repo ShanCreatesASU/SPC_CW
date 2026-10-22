@@ -31,6 +31,8 @@ const crisisTitle = document.getElementById('crisis-title');
 const crisisMessage = document.getElementById('crisis-message');
 const crisisActions = document.querySelector('.crisis-actions');
 const gameStatus = document.getElementById('game-status');
+const levelCelebration = document.getElementById('level-celebration');
+const celebrationRain = levelCelebration.querySelector('.celebration-rain');
 const startButton = document.getElementById('start-game');
 const restartButton = document.getElementById('restart-game');
 
@@ -40,9 +42,11 @@ let gamePhase = 'idle';
 let cards = [];
 let selectedCards = [];
 let mismatchTimer;
+let celebrationTimer;
 let bankedInventory = createInventory();
 let levelInventory = createInventory();
-let awardedPairs = new Set();
+let goldenCans = 0;
+let goldenCanCollectedThisLevel = false;
 
 function createInventory() {
   return { cans:0, drops: 0, buckets: 0 };
@@ -67,19 +71,12 @@ function shuffle(items) {
 function createLevel() {
   cards = [];
   selectedCards = [];
-  awardedPairs = new Set();
-//Shan suspect this is for pairs not working. 
-//try:
-//if drops === drops { pairDrop};
-//if buckets === buckets { pairBucket};
-//if cans === cans { pairCans};
 
   RESOURCE_TYPES.forEach(resource => {
     for (let pair = 0; pair < PAIRS_PER_RESOURCE; pair += 1) {
-      const pairId = `${level}-${resource.id}-${pair}`;
       cards.push(
-        { id: `${pairId}-a`, type: 'resource', resourceId: resource.id, pairId, matched: false, faceUp: false },
-        { id: `${pairId}-b`, type: 'resource', resourceId: resource.id, pairId, matched: false, faceUp: false }
+        { id: `${level}-${resource.id}-${pair}-a`, type: 'resource', resourceId: resource.id, matched: false, faceUp: false },
+        { id: `${level}-${resource.id}-${pair}-b`, type: 'resource', resourceId: resource.id, matched: false, faceUp: false }
       );
     }
   });
@@ -95,6 +92,13 @@ function createLevel() {
     });
   });
 
+  cards.push({
+    id: `${level}-golden-can`,
+    type: 'bonus',
+    collected: goldenCanCollectedThisLevel,
+    faceUp: false
+  });
+
   shuffle(cards);
   renderBoard();
   updateStats();
@@ -106,14 +110,24 @@ function renderBoard() {
 
   cards.forEach(card => {
     const button = document.createElement('button');
-    const revealed = card.faceUp || card.matched || card.consumed;
+    const revealed = card.faceUp || card.matched || card.consumed || card.collected;
     button.type = 'button';
     button.className = 'grid-cell';
     button.dataset.cardId = card.id;
     button.disabled = !canSelect(card);
     button.setAttribute('aria-pressed', String(revealed));
 
-    if (card.type === 'resource') {
+    if (card.type === 'bonus') {
+      button.classList.add('is-golden-can');
+      button.setAttribute('aria-label', revealed ? 'Golden Jerry Can bonus' : 'Face-down bonus card');
+      if (revealed) {
+        button.classList.add('is-revealed', 'is-collected');
+        button.innerHTML = '<img src="img/water-can.png" alt=""><span>Golden Jerry Can</span>';
+      } else {
+        button.classList.add('is-face-down');
+        button.textContent = '★';
+      }
+    } else if (card.type === 'resource') {
       const resource = RESOURCE_TYPES.find(item => item.id === card.resourceId);
       button.setAttribute('aria-label', revealed ? resource.label : 'Face-down card');
       if (revealed) {
@@ -143,7 +157,7 @@ function renderBoard() {
 }
 
 function canSelect(card) {
-  if (!gameActive || card.matched || card.consumed || card.faceUp) return false;
+  if (!gameActive || card.matched || card.consumed || card.collected || card.faceUp) return false;
   if (gamePhase === 'normal') return true;
   return gamePhase === 'challenge' && card.type === 'resource';
 }
@@ -156,6 +170,17 @@ function selectCard(cardId) {
 
   if (card.type === 'crisis') {
     triggerCrisis(card);
+    return;
+  }
+
+  if (card.type === 'bonus') {
+    card.collected = true;
+    goldenCanCollectedThisLevel = true;
+    card.faceUp = false;
+    goldenCans += 1;
+    gameStatus.textContent = 'Golden Jerry Can collected! It is protected from crises.';
+    renderBoard();
+    updateStats();
     return;
   }
 
@@ -173,7 +198,7 @@ function selectCard(cardId) {
 function resolveRegularTurn() {
   gamePhase = 'comparing';
   const [first, second] = selectedCards;
-  if (first.pairId === second.pairId) {
+  if (resourcesMatch(first, second)) {
     gamePhase = 'match-resolving';
     awardPair(first, second);
     shuffleUnmatchedCards();
@@ -197,11 +222,21 @@ function resolveRegularTurn() {
   }, 1000);
 }
 
+function resourcesMatch(first, second) {
+  if (first.type !== 'resource' || second.type !== 'resource') return false;
+
+  const firstResource = RESOURCE_TYPES.find(item => item.id === first.resourceId);
+  const secondResource = RESOURCE_TYPES.find(item => item.id === second.resourceId);
+
+  return Boolean(firstResource && secondResource
+    && firstResource.image === secondResource.image
+    && firstResource.label === secondResource.label);
+}
+
 function awardPair(first, second) {
-  if (first.pairId !== second.pairId || awardedPairs.has(first.pairId)) return false;
+  if (!resourcesMatch(first, second) || first.matched || second.matched) return false;
   first.matched = true;
   second.matched = true;
-  awardedPairs.add(first.pairId);
   levelInventory[first.resourceId] += 1;
   return true;
 }
@@ -263,7 +298,7 @@ function resolveChallenge() {
   const [first, second] = selectedCards;
   let result;
 
-  if (first.pairId === second.pairId) {
+  if (resourcesMatch(first, second)) {
     awardPair(first, second);
     result = `Challenge successful: you earned 1 ${resourceLabel(first.resourceId)}.`;
   } else {
@@ -340,17 +375,41 @@ function checkLevelComplete() {
     .every(card => card.matched);
   if (!allPairsMatched) return;
 
+  const completedLevel = level;
   RESOURCE_TYPES.forEach(resource => {
     bankedInventory[resource.id] += levelInventory[resource.id];
   });
   levelInventory = createInventory();
+  goldenCanCollectedThisLevel = false;
   level += 1;
-  gameStatus.textContent = `Level complete! Welcome to Level ${level}. Resources earned in earlier levels are saved.`;
+  gameStatus.textContent = `You did it! Level ${completedLevel} complete. Welcome to Level ${level}. Resources earned in earlier levels are saved.`;
+  showLevelCelebration();
   createLevel();
+}
+
+function showLevelCelebration() {
+  clearTimeout(celebrationTimer);
+  celebrationRain.replaceChildren();
+
+  for (let index = 0; index < 28; index += 1) {
+    const drop = document.createElement('span');
+    drop.className = 'celebration-raindrop';
+    drop.textContent = '💧';
+    drop.style.setProperty('--drop-left', `${Math.random() * 100}%`);
+    drop.style.setProperty('--drop-delay', `${Math.random() * 0.8}s`);
+    drop.style.setProperty('--drop-duration', `${1.4 + Math.random() * 1.2}s`);
+    celebrationRain.appendChild(drop);
+  }
+
+  levelCelebration.hidden = false;
+  celebrationTimer = window.setTimeout(() => {
+    levelCelebration.hidden = true;
+  }, 3000);
 }
 
 function updateStats() {
   document.getElementById('current-level').textContent = String(level);
+  document.getElementById('golden-cans').textContent = String(goldenCans);
   RESOURCE_TYPES.forEach(resource => {
     const total = bankedInventory[resource.id] + levelInventory[resource.id];
     document.getElementById(`current-${resource.id}`).textContent = String(total);
@@ -370,10 +429,14 @@ function startGame() {
 
 function restartGame() {
   clearTimeout(mismatchTimer);
+  clearTimeout(celebrationTimer);
+  levelCelebration.hidden = true;
   gameActive = true;
   level = 1;
   bankedInventory = createInventory();
   levelInventory = createInventory();
+  goldenCans = 0;
+  goldenCanCollectedThisLevel = false;
   gamePhase = 'normal';
   hideCrisisPanel();
   gameStatus.textContent = 'New game started. Match resource pairs and watch out for crisIs!';
@@ -384,5 +447,4 @@ document.getElementById('try-again').addEventListener('click', beginChallenge);
 document.getElementById('reset-level').addEventListener('click', resetLevel);
 startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', restartGame);
-
 createLevel();

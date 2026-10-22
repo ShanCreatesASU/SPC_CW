@@ -15,8 +15,13 @@
       <p>Jerry cans: <strong id="current-cans">0</strong><small>This level: <span id="level-cans">0</span></small></p>
       <p>Water drops: <strong id="current-drops">0</strong><small>This level: <span id="level-drops">0</span></small></p>
       <p>Buckets: <strong id="current-buckets">0</strong><small>This level: <span id="level-buckets">0</span></small></p>
+      <p class="golden-can-stat">Golden Jerry Can: <strong id="golden-cans">0</strong><small>Protected bonus</small></p>
     </div>
     <p id="game-status" class="game-status" aria-live="polite"></p>
+    <div id="level-celebration" class="level-celebration" aria-hidden="true" hidden>
+      <p class="celebration-message">You did it!</p>
+      <div class="celebration-rain"></div>
+    </div>
     <section id="crisis-panel" class="crisis-panel" aria-labelledby="crisis-title" aria-live="assertive" hidden>
       <h2 id="crisis-title"></h2>
       <p id="crisis-message"></p>
