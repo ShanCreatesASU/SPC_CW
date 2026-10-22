@@ -33,8 +33,13 @@ const crisisActions = document.querySelector('.crisis-actions');
 const gameStatus = document.getElementById('game-status');
 const levelCelebration = document.getElementById('level-celebration');
 const celebrationRain = levelCelebration.querySelector('.celebration-rain');
-const startButton = document.getElementById('start-game');
-const restartButton = document.getElementById('restart-game');
+const startButton = document.getElementById('start-button');
+const restartButton = document.getElementById('restart-button');
+const introScreen = document.getElementById('intro-screen');
+const gameScreen = document.getElementById('game-screen');
+const brandLink = document.querySelector('.brand');
+const waterDetail = document.getElementById('water-detail');
+const waterSegments = document.querySelectorAll('.water-segment');
 
 let level = 1;
 let gameActive = false;
@@ -71,6 +76,9 @@ function shuffle(items) {
 function createLevel() {
   cards = [];
   selectedCards = [];
+  document.getElementById('level-kicker').textContent = level === 1
+    ? 'LEVEL 1 · FIND THE FIRST DROPS'
+    : `LEVEL ${level} · KEEP BUILDING YOUR SUPPLY`;
 
   RESOURCE_TYPES.forEach(resource => {
     for (let pair = 0; pair < PAIRS_PER_RESOURCE; pair += 1) {
@@ -418,13 +426,16 @@ function updateStats() {
 }
 
 function startGame() {
-  if (gameActive) return;
-  gameActive = true;
-  gamePhase = 'normal';
-  startButton.hidden = true;
+  if (!gameActive) {
+    gameActive = true;
+    gamePhase = 'normal';
+    gameStatus.textContent = 'Match resource pairs. Watch out for crisis cards!';
+    createLevel();
+  }
+  introScreen.hidden = true;
+  gameScreen.hidden = false;
   restartButton.hidden = false;
-  gameStatus.textContent = 'Match resource pairs. Watch out for crisis cards!';
-  createLevel();
+  gameGrid.querySelector('button:not(:disabled)')?.focus();
 }
 
 function restartGame() {
@@ -439,12 +450,38 @@ function restartGame() {
   goldenCanCollectedThisLevel = false;
   gamePhase = 'normal';
   hideCrisisPanel();
-  gameStatus.textContent = 'New game started. Match resource pairs and watch out for crisIs!';
+  gameStatus.textContent = 'New game started. Match resource pairs and watch out for crises!';
+  introScreen.hidden = true;
+  gameScreen.hidden = false;
+  restartButton.hidden = false;
   createLevel();
+}
+
+function showIntro() {
+  introScreen.hidden = false;
+  gameScreen.hidden = true;
+}
+
+function updateWaterDetail(category) {
+  const details = {
+    needs: '<strong>Needs · Everyday essentials</strong><br>Drinking, cooking, and hygiene. The illustrative monthly baseline is 2,820 gallons.',
+    routine: '<strong>Routine · 1,050 gallons per month</strong><br>Laundry and standard showers. The illustrative monthly baseline is 2,820 gallons.',
+    waste: '<strong>Waste · Water lost unnecessarily</strong><br>Leaks and avoidable use. The illustrative monthly baseline is 2,820 gallons.'
+  };
+  waterDetail.innerHTML = details[category];
+  waterSegments.forEach(segment => {
+    const isSelected = segment.dataset.category === category;
+    segment.classList.toggle('is-selected', isSelected);
+    segment.setAttribute('aria-pressed', String(isSelected));
+  });
 }
 
 document.getElementById('try-again').addEventListener('click', beginChallenge);
 document.getElementById('reset-level').addEventListener('click', resetLevel);
 startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', restartGame);
+brandLink.addEventListener('click', showIntro);
+waterSegments.forEach(segment => {
+  segment.addEventListener('click', () => updateWaterDetail(segment.dataset.category));
+});
 createLevel();

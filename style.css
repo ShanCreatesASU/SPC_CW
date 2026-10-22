@@ -1,6 +1,3 @@
-/*Intro CSS
-Intro CSS
-
 :root {
 	color-scheme: light;
 	--ink: #182e36;
@@ -115,7 +112,6 @@ h1, h2, p { margin-top: 0; }
 .water-detail { min-height: 53px; margin: 0; color: #314a52; line-height: 1.6; }
 .water-detail strong { color: var(--ink); }
 .guide-footnote { margin: 13px 0 0; padding-top: 12px; border-top: 1px solid var(--line); color: #718186; font-size: 11px; }
-*/
 
 /*Gameplay CSS*/
 
@@ -139,16 +135,6 @@ h1, h2, p { margin-top: 0; }
 
 * {
   box-sizing: border-box;
-}
-
-body {
-  min-height: 100vh;
-  margin: 0;
-  padding: clamp(16px, 4vw, 40px);
-  background: linear-gradient(135deg, #dff4ff 0%, #b9e4f5 50%, #eaf9ff 100%);
-  color: var(--color-ink);
-  font-family: "Avenir Next", Avenir, "Proxima Nova", "Segoe UI", sans-serif;
-  -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -551,5 +537,233 @@ button:disabled {
 
   .celebration-raindrop {
     animation: none;
+  }
+
+  .intro-copy,
+  .water-guide {
+    animation: none;
+  }
+}
+
+.intro-copy h1,
+.game-heading h1 {
+  text-align: left;
+}
+
+.game-screen {
+  padding: 52px 0 72px;
+}
+
+.game-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 25px;
+}
+
+.game-heading .eyebrow {
+  margin-bottom: 12px;
+}
+
+.game-heading h1 {
+  margin-bottom: 0;
+  font-size: clamp(36px, 5vw, 58px);
+}
+
+.game-instruction {
+  max-width: 340px;
+  margin: 0 0 7px;
+  color: var(--muted);
+}
+
+.game-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.game-status-row .level-indicator {
+  margin: 0 0 16px;
+}
+
+.game-status {
+  min-height: 24px;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.stats {
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.stats p {
+  border-color: var(--line);
+  border-radius: 4px;
+}
+
+.stats strong {
+  color: var(--deep);
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.33fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.board-panel,
+.resource-panel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.board-topline,
+.resource-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.board-topline {
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+
+.board-topline span:last-child {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.game-grid {
+  width: 100%;
+}
+
+.board-note,
+.resource-note {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.resource-panel-heading {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.panel-index {
+  color: #287d91;
+}
+
+.resource-panel-heading h2 {
+  margin: 8px 0 0;
+  font-family: var(--display-font);
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.resource-panel .stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.crisis-panel {
+  border-radius: 3px;
+}
+
+.crisis-actions button {
+  border-radius: 3px;
+}
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 760px) {
+  .site-header,
+  main {
+    width: min(100% - 32px, 560px);
+  }
+
+  .intro-screen {
+    min-height: auto;
+    padding: 54px 0 60px;
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-panel {
+    order: -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header,
+  main {
+    width: calc(100% - 28px);
+  }
+
+  .site-header {
+    min-height: 68px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand span {
+    font-size: 10px;
+  }
+
+  .brand img {
+    width: 29px;
+    height: 34px;
+  }
+
+  .intro-copy h1 {
+    font-size: clamp(48px, 14vw, 66px);
+  }
+
+  .water-guide {
+    padding: 22px 20px;
+  }
+
+  .game-screen {
+    padding-top: 36px;
+  }
+
+  .game-heading {
+    display: block;
+  }
+
+  .game-heading h1 {
+    margin-bottom: 12px;
+  }
+
+  .game-instruction {
+    margin: 0;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .board-panel,
+  .resource-panel {
+    padding: 16px;
   }
 }

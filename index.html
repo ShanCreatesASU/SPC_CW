@@ -1,39 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Match and Merge</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Every Drop Counts</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <div class="container">
-    <h1>Match and Merge</h1>
-    <p class="game-instructions">Match resource pairs to earn supplies. Crisis cards trigger as soon as you reveal them.</p>
-    <p class="level-indicator">Level <span id="current-level">1</span></p>
-    <div class="stats">
-      <p>Jerry cans: <strong id="current-cans">0</strong><small>This level: <span id="level-cans">0</span></small></p>
-      <p>Water drops: <strong id="current-drops">0</strong><small>This level: <span id="level-drops">0</span></small></p>
-      <p>Buckets: <strong id="current-buckets">0</strong><small>This level: <span id="level-buckets">0</span></small></p>
-      <p class="golden-can-stat">Golden Jerry Can: <strong id="golden-cans">0</strong><small>Protected bonus</small></p>
-    </div>
-    <p id="game-status" class="game-status" aria-live="polite"></p>
-    <div id="level-celebration" class="level-celebration" aria-hidden="true" hidden>
-      <p class="celebration-message">You did it!</p>
-      <div class="celebration-rain"></div>
-    </div>
-    <section id="crisis-panel" class="crisis-panel" aria-labelledby="crisis-title" aria-live="assertive" hidden>
-      <h2 id="crisis-title"></h2>
-      <p id="crisis-message"></p>
-      <div class="crisis-actions">
-        <button id="try-again" type="button">Try Again</button>
-        <button id="reset-level" type="button">Reset Level</button>
+  <header class="site-header">
+    <a class="brand" href="#intro" aria-label="Every Drop Counts home">
+      <img src="img/cw_logo.png" alt="charity: water">
+      <span>EVERY DROP COUNTS</span>
+    </a>
+    <button class="button button-outline header-restart" id="restart-button" type="button" hidden>Restart game</button>
+  </header>
+
+  <main id="intro">
+    <section class="intro-screen" id="intro-screen" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <p class="eyebrow">A water access memory game</p>
+        <h1 id="intro-title">Every drop<br><span>counts.</span></h1>
+        <p class="intro-description">Life is unpredictable. Where you are born and live can shape the obstacles you face and the opportunities you have to do more than survive. Match water resources, overcome challenges, and work toward building an irrigation system.</p>
+        <button class="button button-primary" id="start-button" type="button">Start game <span aria-hidden="true">→</span></button>
+      </div>
+
+      <aside class="water-guide" aria-labelledby="water-guide-title">
+        <div class="guide-heading">
+          <span class="guide-number">01 / WATER, EVERY DAY</span>
+          <h2 id="water-guide-title">Where water goes</h2>
+          <p>Water needs and access look different for everyone.</p>
+        </div>
+        <div class="water-bar" role="group" aria-label="Explore monthly water use categories">
+          <button class="water-segment segment-needs" data-category="needs" type="button" aria-label="Explore needs" aria-pressed="false">
+            <span>Needs</span>
+          </button>
+          <button class="water-segment segment-routine is-selected" data-category="routine" type="button" aria-label="Explore routine" aria-pressed="true">
+            <span>Routine</span>
+          </button>
+          <button class="water-segment segment-waste" data-category="waste" type="button" aria-label="Explore waste" aria-pressed="false">
+            <span>Waste</span>
+          </button>
+        </div>
+        <p class="guide-hint">Select a section to explore how water is used.</p>
+        <p class="water-detail" id="water-detail" aria-live="polite"><strong>Routine · 1,050 gallons per month</strong><br>Laundry and standard showers. The illustrative monthly baseline is 2,820 gallons.</p>
+        <p class="guide-footnote">The 2,820-gallon total is an illustrative monthly baseline.</p>
+      </aside>
+    </section>
+
+    <section class="game-screen" id="game-screen" aria-labelledby="game-title" hidden>
+      <div class="game-heading">
+        <div>
+          <p class="eyebrow" id="level-kicker">LEVEL 1 · FIND THE FIRST DROPS</p>
+          <h1 id="game-title">Build your water supply</h1>
+        </div>
+        <p class="game-instruction" id="game-instruction">Find two matching resources. Every match moves your irrigation system forward.</p>
+      </div>
+
+      <div class="game-status-row">
+        <p class="level-indicator">Level <span id="current-level">1</span></p>
+        <p class="game-status" id="game-status" aria-live="polite"></p>
+      </div>
+
+      <div id="level-celebration" class="level-celebration" aria-hidden="true" hidden>
+        <p class="celebration-message">You did it!</p>
+        <div class="celebration-rain"></div>
+      </div>
+
+      <section id="crisis-panel" class="crisis-panel" aria-labelledby="crisis-title" aria-live="assertive" hidden>
+        <h2 id="crisis-title"></h2>
+        <p id="crisis-message"></p>
+        <div class="crisis-actions">
+          <button id="try-again" type="button">Try Again</button>
+          <button id="reset-level" type="button">Reset Level</button>
+        </div>
+      </section>
+
+      <div class="game-layout">
+        <section class="board-panel" aria-label="Memory match game board">
+          <div class="board-topline">
+            <span>RESOURCE FIELD</span>
+            <span id="move-display">Match resources to build your supply</span>
+          </div>
+          <div class="game-grid" aria-label="Matching game board"></div>
+          <p class="board-note">Crisis cards are revealed immediately. Take your time between turns.</p>
+        </section>
+
+        <aside class="resource-panel" aria-labelledby="resource-title">
+          <div class="resource-panel-heading">
+            <span class="panel-index">YOUR SUPPLY</span>
+            <h2 id="resource-title">Resources</h2>
+          </div>
+          <div class="stats" aria-label="Water resources">
+            <p>Jerry cans: <strong id="current-cans">0</strong><small>This level: <span id="level-cans">0</span></small></p>
+            <p>Water drops: <strong id="current-drops">0</strong><small>This level: <span id="level-drops">0</span></small></p>
+            <p>Buckets: <strong id="current-buckets">0</strong><small>This level: <span id="level-buckets">0</span></small></p>
+            <p class="golden-can-stat">Golden Jerry Can: <strong id="golden-cans">0</strong><small>Protected bonus</small></p>
+          </div>
+          <p class="resource-note">Match two of the same resource to add it to your supply. Your progress from completed levels is saved.</p>
+        </aside>
       </div>
     </section>
-    <div class="game-grid" aria-label="Matching game board"></div>
-    <button id="start-game">Start Game</button>
-    <button id="restart-game" type="button" hidden>Restart Game</button>
-  </div>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,12 +1,13 @@
-# Water Quest
+# Every Drop Counts
 
-Water Quest is a resource-matching game. Match two identical resource cards to
-earn a jerry can, water drop, or bucket. Each level contains two pairs of each
-resource and Storm, Flood, and Drought crisis cards.
+Every Drop Counts is a water access memory game. Explore the introduction's
+water-use categories, then match two identical resource cards to earn a jerry
+can, water drop, or bucket. Each level contains two pairs of each resource and
+Storm, Flood, and Drought crisis cards.
 
 ## Playing
 
-- Select **Start Game** to begin.
+- Select a water-use category to read about it, then select **Start game**.
 - Match resource cards to add resources to your current level.
 - Matched cards stay visible and cannot be selected again. Remaining unmatched
   cards are shuffled after each successful match.
