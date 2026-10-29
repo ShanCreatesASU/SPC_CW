@@ -285,11 +285,11 @@ function describeCrisisEffect(crisis, lost) {
     ? `You lost ${losses.join(' and ')}.`
     : 'You had no resources in the affected categories to lose.';
   const explanations = {
-    storm: 'The storm washes away all water drops.',
-    flood: 'The flood washes away all water drops and buckets.',
-    drought: 'The drought removes all buckets and jerry cans.'
+    storm: 'There is a storm brewing. Match two cards or lose all collected water drops.',
+    flood: 'A flashflood is headng your way. Match the next two cards or watch all collected water drops and buckets float away.',
+    drought: 'An intense drought is drying all water resources. Match the next two cards to keep all your collected buckets and jerry cans.'
   };
-  return `${explanations[crisis.id]} ${consequence} Choose Try Again for one matching attempt, or Reset Level.`;
+  return `${explanations[crisis.id]} ${consequence} Choose Accept Challenge for one matching attempt, or restart your progress and choose Reset Level.`;
 }
 
 function beginChallenge() {
@@ -351,7 +351,7 @@ function resetLevel() {
   levelInventory = createInventory();
   gamePhase = 'normal';
   hideCrisisPanel();
-  gameStatus.textContent = `Level ${level} reset. Your resources from completed levels are safe.`;
+  gameStatus.textContent = `Level ${level} reset. You weathered the storms. Your resources are safe.`;
   createLevel();
 }
 

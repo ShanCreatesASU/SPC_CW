@@ -18,7 +18,9 @@
 body {
 	min-width: 320px;
 	min-height: 100vh;
+	min-height: 100svh;
 	margin: 0;
+	padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
 	color: var(--ink);
 	background-color: var(--paper);
 	background-image: radial-gradient(#dfe8e2 0.7px, transparent 0.7px);
@@ -54,6 +56,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #126ca1; outline-offs
 main { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
 .intro-screen {
 	min-height: calc(100vh - 79px);
+	min-height: calc(100svh - 79px);
 	padding: 74px 0 84px;
 	display: grid;
 	grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
@@ -290,7 +293,7 @@ h1 img {
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(8px, 2vw, 14px);
   width: min(100%, 560px);
   margin: 0 auto;
@@ -488,7 +491,7 @@ button:disabled {
 
 @media (max-width: 480px) {
   body {
-    padding: 10px;
+    padding: 0;
   }
 
   .container {
@@ -709,9 +712,26 @@ button:disabled {
   .resource-panel {
     order: -1;
   }
+
+  .game-heading {
+    align-items: start;
+  }
+
+  .game-status-row {
+    flex-wrap: wrap;
+  }
+
+  .game-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 520px) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
   .site-header,
   main {
     width: calc(100% - 28px);
@@ -732,6 +752,13 @@ button:disabled {
   .brand img {
     width: 29px;
     height: 34px;
+  }
+
+  .header-restart {
+    flex: none;
+    min-height: 36px;
+    padding-inline: 10px;
+    white-space: nowrap;
   }
 
   .intro-copy h1 {
@@ -762,8 +789,87 @@ button:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .board-topline {
+    gap: 8px;
+  }
+
+  .board-topline span:first-child {
+    flex: none;
+  }
+
+  .board-topline span:last-child {
+    text-align: right;
+  }
+
+  .game-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .board-panel,
   .resource-panel {
     padding: 16px;
+  }
+
+  .crisis-actions {
+    flex-direction: column;
+  }
+
+  .crisis-actions button {
+    width: 100%;
+    flex-basis: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header,
+  main {
+    width: calc(100% - 20px);
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand span {
+    max-width: 86px;
+    line-height: 1.05;
+  }
+
+  .header-restart {
+    font-size: 12px;
+  }
+
+  .intro-copy h1 {
+    font-size: 48px;
+  }
+
+  .intro-description {
+    font-size: 15px;
+  }
+
+  .game-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .board-panel,
+  .resource-panel,
+  .water-guide {
+    padding-inline: 12px;
+  }
+
+  .game-heading h1 {
+    font-size: 34px;
+  }
+
+  .water-bar {
+    height: 62px;
+  }
+
+  .water-segment {
+    padding-inline: 7px;
+  }
+
+  .grid-cell {
+    border-radius: 10px;
   }
 }
